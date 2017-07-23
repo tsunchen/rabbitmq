@@ -1,0 +1,84 @@
+Centos 7 安装rabbitmq
+报错：[root@localhost source]# yum install erlang  
+Loaded plugins: fastestmirror, security  
+Loading mirror speeds from cached hostfile  
+ * base: mirror.neu.edu.cn  
+ * extras: mirror.neu.edu.cn  
+ * updates: mirror.neu.edu.cn  
+http://repos.fedorapeople.org/repos/peter/erlang/epel-6/x86_64/repodata/repomd.xml: [Errno 14] PYCURL ERROR 22 - "The requested URL returned error: 404 Not Found"  
+Trying other mirror.  
+Setting up Install Process  
+No package erlang available.  
+Error: Nothing to do  
+的处理如下：
+
+解决办法：
+
+cd /etc/yum.repos.d/ 看是否有epel.repo和epel-testing.repo
+
+
+[epel]  
+name=Extra Packages for Enterprise Linux 7 - $basearch  
+#baseurl=http://download.fedoraproject.org/pub/epel/6/$basearch  
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch  
+failovermethod=priority  
+enabled=1  
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+  
+[epel-debuginfo]  
+name=Extra Packages for Enterprise Linux 7 - $basearch - Debug  
+#baseurl=http://download.fedoraproject.org/pub/epel/6/$basearch/debug  
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-debug-7&arch=$basearch  
+failovermethod=priority  
+enabled=0  
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7  
+gpgcheck=0
+  
+[epel-source]  
+name=Extra Packages for Enterprise Linux 7 - $basearch - Source  
+#baseurl=http://download.fedoraproject.org/pub/epel/6/SRPMS  
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=epel-source-7&arch=$basearch  
+failovermethod=priority  
+enabled=0  
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7  
+gpgcheck=0
+
+====
+[epel-testing]  
+name=Extra Packages for Enterprise Linux 7 - Testing - $basearch  
+#baseurl=http://download.fedoraproject.org/pub/epel/testing/7/$basearch  
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=testing-epel7&arch=$basearch  
+failovermethod=priority  
+enabled=0  
+gpgcheck=0  
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+  
+[epel-testing-debuginfo]  
+name=Extra Packages for Enterprise Linux 7 - Testing - $basearch - Debug  
+#baseurl=http://download.fedoraproject.org/pub/epel/testing/6/$basearch/debug  
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=testing-debug-epel7&arch=$basearch  
+failovermethod=priority  
+enabled=0  
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7  
+gpgcheck=0
+  
+[epel-testing-source]  
+name=Extra Packages for Enterprise Linux 7 - Testing - $basearch - Source  
+#baseurl=http://download.fedoraproject.org/pub/epel/testing/7/SRPMS  
+mirrorlist=https://mirrors.fedoraproject.org/metalink?repo=testing-source-epel7&arch=$basearch  
+failovermethod=priority  
+enabled=0  
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7  
+gpgcheck=0
+
+然后在再执行#yum install -y erlang rabbitmq-server
+
+安装完成好后，
+systemctl enable rabbitmq-server
+systemctl start rabbitmq-server
+/usr/lib/rabbitmq/bin/rabbitmq-plugins list
+/usr/lib/rabbitmq/bin/rabbitmq-plugins enable rabbitmq_management
+
+浏览器界面运行rabbitmq吧
+云TSunwind
